@@ -9,9 +9,11 @@ import (
 
 	"time"
 
-	"github.com/zmap/zflags"
-	"github.com/sirupsen/logrus"
 	"runtime/debug"
+
+	"github.com/maxlandon/go-flags"
+	"github.com/sirupsen/logrus"
+	// "github.com/jessevdk/go-flags"
 )
 
 var parser *flags.Parser
@@ -35,7 +37,7 @@ func AddGroup(shortDescription string, longDescription string, data interface{})
 // AddCommand adds a module to the parser and returns a pointer to
 // a flags.command object or an error
 func AddCommand(command string, shortDescription string, longDescription string, port int, m ScanModule) (*flags.Command, error) {
-	cmd, err := parser.AddCommand(command, shortDescription, longDescription, m)
+	cmd, err := parser.AddCommand(command, shortDescription, longDescription, m.NewFlags())
 	if err != nil {
 		return nil, err
 	}
@@ -45,19 +47,17 @@ func AddCommand(command string, shortDescription string, longDescription string,
 	return cmd, nil
 }
 
-// ParseCommandLine parses the commands given on the command line
-// and validates the framework configuration (global options)
-// immediately after parsing
-func ParseCommandLine(flags []string) ([]string, string, ScanFlags, error) {
-	posArgs, moduleType, f, err := parser.ParseCommandLine(flags)
+// ParseArgs - Returns the active command of the parser, that is,
+// the command that the user entered, like `zgrab2 ssh`.
+func ParseArgs(args []string) (cmd *flags.Command, err error) {
+	_, err = parser.ParseArgs(args)
 	if err == nil {
 		validateFrameworkConfiguration()
 	}
-	sf, _ := f.(ScanFlags)
-	return posArgs, moduleType, sf, err
+	return parser.Active, err
 }
 
-// ReadAvaiable reads what it can without blocking for more than
+// ReadAvailable reads what it can without blocking for more than
 // defaultReadTimeout per read, or defaultTotalTimeout for the whole session.
 // Reads at most defaultMaxReadSize bytes.
 func ReadAvailable(conn net.Conn) ([]byte, error) {
@@ -215,7 +215,7 @@ func IsTimeoutError(err error) bool {
 // before re-raising the original panic.
 // Example:
 //     defer zgrab2.LogPanic("Error decoding body '%x'", body)
-func LogPanic(format string, args...interface{}) {
+func LogPanic(format string, args ...interface{}) {
 	err := recover()
 	if err == nil {
 		return

@@ -1,6 +1,8 @@
 package zgrab2
 
-import "sync"
+import (
+	"sync"
+)
 
 // Monitor is a collection of states per scans and a channel to communicate
 // those scans to the monitor

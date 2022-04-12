@@ -8,6 +8,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2/lib/output"
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // Grab contains all scan responses for a single host
@@ -56,7 +57,7 @@ func (target *ScanTarget) Host() string {
 }
 
 // Open connects to the ScanTarget using the configured flags, and returns a net.Conn that uses the configured timeouts for Read/Write operations.
-func (target *ScanTarget) Open(flags *BaseFlags) (net.Conn, error) {
+func (target *ScanTarget) Open(flags *mod.BaseFlags) (net.Conn, error) {
 	var port uint
 	// If the port is supplied in ScanTarget, let that override the cmdline option
 	if target.Port != nil {
@@ -72,7 +73,7 @@ func (target *ScanTarget) Open(flags *BaseFlags) (net.Conn, error) {
 // OpenTLS connects to the ScanTarget using the configured flags, then performs
 // the TLS handshake. On success error is nil, but the connection can be non-nil
 // even if there is an error (this allows fetching the handshake log).
-func (target *ScanTarget) OpenTLS(baseFlags *BaseFlags, tlsFlags *TLSFlags) (*TLSConnection, error) {
+func (target *ScanTarget) OpenTLS(baseFlags *mod.BaseFlags, tlsFlags *TLSFlags) (*TLSConnection, error) {
 	conn, err := tlsFlags.Connect(target, baseFlags)
 	if err != nil {
 		return conn, err
@@ -83,7 +84,7 @@ func (target *ScanTarget) OpenTLS(baseFlags *BaseFlags, tlsFlags *TLSFlags) (*TL
 
 // OpenUDP connects to the ScanTarget using the configured flags, and returns a net.Conn that uses the configured timeouts for Read/Write operations.
 // Note that the UDP "connection" does not have an associated timeout.
-func (target *ScanTarget) OpenUDP(flags *BaseFlags, udp *UDPFlags) (net.Conn, error) {
+func (target *ScanTarget) OpenUDP(flags *mod.BaseFlags, udp *mod.UDPFlags) (net.Conn, error) {
 	var port uint
 	// If the port is supplied in ScanTarget, let that override the cmdline option
 	if target.Port != nil {
