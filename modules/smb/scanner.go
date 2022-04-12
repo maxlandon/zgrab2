@@ -6,12 +6,14 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
 	"github.com/zmap/zgrab2/lib/smb/smb"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // Flags holds the command-line configuration for the smb scan module.
 // Populated by the framework.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 
 	// SetupSession tells the client to continue the handshake up to the point where credentials would be needed.
 	SetupSession bool `long:"setup-session" description:"After getting the response from the negotiation request, send a setup session packet."`
@@ -56,7 +58,7 @@ func (module *Module) Description() string {
 // Validate checks that the flags are valid.
 // On success, returns nil.
 // On failure, returns an error instance describing the error.
-func (flags *Flags) Validate(args []string) error {
+func (flags *Flags) Execute(args []string) error {
 	return nil
 }
 

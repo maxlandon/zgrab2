@@ -4,6 +4,7 @@
 package banner
 
 import (
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -12,14 +13,15 @@ import (
 	"net"
 	"regexp"
 	"strconv"
-	"encoding/hex"
 
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // Flags give the command-line flags for the banner module.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	Probe     string `long:"probe" default:"\\n" description:"Probe to send to the server. Use triple slashes to escape, for example \\\\\\n is literal \\n. Mutually exclusive with --probe-file" `
 	ProbeFile string `long:"probe-file" description:"Read probe from file as byte array (hex). Mutually exclusive with --probe"`
 	Pattern   string `long:"pattern" description:"Pattern to match, must be valid regexp."`
@@ -40,7 +42,7 @@ type Scanner struct {
 	probe  []byte
 }
 
-// ScanResults instances are returned by the module's Scan function.
+// Results instances are returned by the module's Scan function.
 type Results struct {
 	Banner string `json:"banner,omitempty"`
 	Length int    `json:"length,omitempty"`
@@ -85,8 +87,8 @@ func (m *Module) NewScanner() zgrab2.Scanner {
 	return new(Scanner)
 }
 
-// Validate validates the flags and returns nil on success.
-func (f *Flags) Validate(args []string) error {
+// Execute - validates the flags and returns nil on success.
+func (f *Flags) Execute(args []string) error {
 	if f.Probe != "\\n" && f.ProbeFile != "" {
 		log.Fatal("Cannot set both --probe and --probe-file")
 		return zgrab2.ErrInvalidArguments
@@ -95,7 +97,7 @@ func (f *Flags) Validate(args []string) error {
 }
 
 // Description returns an overview of this module.
-func (module *Module) Description() string {
+func (m *Module) Description() string {
 	return "Fetch a raw banner by sending a static probe and checking the result against a regular expression"
 }
 

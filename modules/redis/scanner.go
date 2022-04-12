@@ -25,11 +25,13 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
 	"gopkg.in/yaml.v2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // Flags contains redis-specific command-line flags.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 
 	CustomCommands   string `long:"custom-commands" description:"Pathname for JSON/YAML file that contains extra commands to execute. WARNING: This is sent in the clear."`
 	Mappings         string `long:"mappings" description:"Pathname for JSON/YAML file that contains mappings for command names."`
@@ -181,7 +183,7 @@ func (module *Module) Description() string {
 }
 
 // Validate checks that the flags are valid
-func (flags *Flags) Validate(args []string) error {
+func (flags *Flags) Execute(args []string) error {
 	return nil
 }
 

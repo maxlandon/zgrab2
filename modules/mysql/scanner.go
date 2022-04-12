@@ -10,6 +10,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
 	"github.com/zmap/zgrab2/lib/mysql"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // ScanResults contains detailed information about the scan.
@@ -132,7 +134,7 @@ func readResultsFromConnectionLog(connectionLog *mysql.ConnectionLog) *ScanResul
 
 // Flags give the command-line flags for the MySQL module.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	zgrab2.TLSFlags
 	Verbose bool `long:"verbose" description:"More verbose logging, include debug fields in the scan results"`
 }
@@ -170,8 +172,8 @@ func (m *Module) Description() string {
 	return "Perform a handshake with a MySQL database"
 }
 
-// Validate validates the flags and returns nil on success.
-func (f *Flags) Validate(args []string) error {
+// Execute validates the flags and returns nil on success.
+func (f *Flags) Execute(args []string) error {
 	return nil
 }
 

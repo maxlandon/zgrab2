@@ -3,10 +3,12 @@ package modules
 import (
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 type TLSFlags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	zgrab2.TLSFlags
 }
 
@@ -38,7 +40,7 @@ func (m *TLSModule) Description() string {
 	return "Perform a TLS handshake"
 }
 
-func (f *TLSFlags) Validate(args []string) error {
+func (f *TLSFlags) Execute(args []string) error {
 	return nil
 }
 

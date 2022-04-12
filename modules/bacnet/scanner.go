@@ -6,19 +6,16 @@ package bacnet
 
 import (
 	log "github.com/sirupsen/logrus"
+
 	"github.com/zmap/zgrab2"
+	"github.com/zmap/zgrab2/modules/flags"
 )
 
 // Scan results are in log.go
 
 // Flags holds the command-line configuration for the bacnet scan module.
 // Populated by the framework.
-type Flags struct {
-	zgrab2.BaseFlags
-	zgrab2.UDPFlags
-
-	Verbose bool `long:"verbose" description:"More verbose logging, include debug fields in the scan results"`
-}
+type Flags flags.Bacnet
 
 // Module implements the zgrab2.Module interface.
 type Module struct {
@@ -53,10 +50,10 @@ func (module *Module) Description() string {
 	return "Probe for devices that speak Bacnet, commonly used for HVAC control."
 }
 
-// Validate checks that the flags are valid.
+// Execute - Actually validate checks that the flags are valid.
 // On success, returns nil.
 // On failure, returns an error instance describing the error.
-func (flags *Flags) Validate(args []string) error {
+func (flags *Flags) Execute(args []string) error {
 	return nil
 }
 
@@ -109,6 +106,7 @@ func (scanner *Scanner) Protocol() string {
 // The result is a bacnet.Log, and contains any of the above.
 func (scanner *Scanner) Scan(target zgrab2.ScanTarget) (zgrab2.ScanStatus, interface{}, error) {
 	conn, err := target.OpenUDP(&scanner.config.BaseFlags, &scanner.config.UDPFlags)
+	// conn, err := target.OpenUDP(&scanner.config.BaseFlags, &scanner.config.UDPFlags)
 	if err != nil {
 		return zgrab2.TryGetScanStatus(err), nil, err
 	}

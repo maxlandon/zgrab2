@@ -25,6 +25,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 var (
@@ -793,8 +795,8 @@ type Results struct {
 
 // Flags holds the command-line flags for the scanner.
 type Flags struct {
-	zgrab2.BaseFlags
-	zgrab2.UDPFlags
+	mod.BaseFlags
+	mod.UDPFlags
 	Verbose       bool   `long:"verbose" description:"More verbose logging, include debug fields in the scan results"`
 	Version       uint8  `long:"version" description:"The version number to pass to the Server." default:"3"`
 	LeapIndicator uint8  `long:"leap-indicator" description:"The LI value to pass to the Server. Default 3 (Unknown)"`
@@ -837,7 +839,7 @@ func (module *Module) Description() string {
 }
 
 // Validate checks that the flags are valid
-func (cfg *Flags) Validate(args []string) error {
+func (cfg *Flags) Execute(args []string) error {
 	return nil
 }
 

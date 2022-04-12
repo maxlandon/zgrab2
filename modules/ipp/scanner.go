@@ -20,6 +20,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
 	"github.com/zmap/zgrab2/lib/http"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 const (
@@ -81,7 +83,7 @@ type ScanResults struct {
 // Flags holds the command-line configuration for the ipp scan module.
 // Populated by the framework.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	zgrab2.TLSFlags
 	Verbose bool `long:"verbose" description:"More verbose logging, include debug fields in the scan results"`
 
@@ -139,10 +141,10 @@ func (module *Module) Description() string {
 	return "Probe for printers via IPP"
 }
 
-// Validate checks that the flags are valid.
+// Execute checks that the flags are valid.
 // On success, returns nil.
 // On failure, returns an error instance describing the error.
-func (flags *Flags) Validate(args []string) error {
+func (flags *Flags) Execute(args []string) error {
 	return nil
 }
 

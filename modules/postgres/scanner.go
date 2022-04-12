@@ -19,6 +19,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 const (
@@ -116,7 +118,7 @@ type AuthenticationMode struct {
 // Flags sets the module-specific flags that can be passed in from the
 // command line.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	zgrab2.TLSFlags
 	SkipSSL         bool   `long:"skip-ssl" description:"If set, do not attempt to negotiate an SSL connection"`
 	Verbose         bool   `long:"verbose" description:"More verbose logging, include debug fields in the scan results"`
@@ -286,7 +288,7 @@ func (m *Module) Description() string {
 }
 
 // Validate checks the arguments; on success, returns nil.
-func (f *Flags) Validate(args []string) error {
+func (f *Flags) Execute(args []string) error {
 	return nil
 }
 

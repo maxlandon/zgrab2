@@ -26,12 +26,14 @@
 package pop3
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // ScanResults instances are returned by the module's Scan function.
@@ -58,7 +60,7 @@ type ScanResults struct {
 // Flags holds the command-line configuration for the POP3 scan module.
 // Populated by the framework.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	zgrab2.TLSFlags
 
 	// SendHELP indicates that the client should send the HELP command.
@@ -116,7 +118,7 @@ func (module *Module) Description() string {
 // Validate checks that the flags are valid.
 // On success, returns nil.
 // On failure, returns an error instance describing the error.
-func (flags *Flags) Validate(args []string) error {
+func (flags *Flags) Execute(args []string) error {
 	if flags.StartTLS && flags.POP3Secure {
 		log.Error("Cannot send both --starttls and --pop3s")
 		return zgrab2.ErrInvalidArguments
@@ -170,14 +172,14 @@ func VerifyPOP3Contents(banner string) zgrab2.ScanStatus {
 	case strings.HasPrefix(banner, "-ERR "):
 		return zgrab2.SCAN_APPLICATION_ERROR
 	case strings.HasPrefix(banner, "+OK "),
-	     strings.Contains(banner, "POP3"),
-	     // These are rare for POP3 if they happen at all,
-	     // But it won't hurt to check just in case as a backup
-	     strings.Contains(lowerBanner, "blacklist"),
-	     strings.Contains(lowerBanner, "abuse"),
-	     strings.Contains(lowerBanner, "rbl"),
-	     strings.Contains(lowerBanner, "spamhaus"),
-	     strings.Contains(lowerBanner, "relay"):
+		strings.Contains(banner, "POP3"),
+		// These are rare for POP3 if they happen at all,
+		// But it won't hurt to check just in case as a backup
+		strings.Contains(lowerBanner, "blacklist"),
+		strings.Contains(lowerBanner, "abuse"),
+		strings.Contains(lowerBanner, "rbl"),
+		strings.Contains(lowerBanner, "spamhaus"),
+		strings.Contains(lowerBanner, "relay"):
 		return zgrab2.SCAN_SUCCESS
 	default:
 		return zgrab2.SCAN_PROTOCOL_ERROR

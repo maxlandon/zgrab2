@@ -18,6 +18,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // ScanResults is the output of the scan.
@@ -46,7 +48,7 @@ type ScanResults struct {
 // Flags are the FTP-specific command-line flags. Taken from the original zgrab.
 // (TODO: should FTPAuthTLS be on by default?).
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	zgrab2.TLSFlags
 
 	Verbose     bool `long:"verbose" description:"More verbose logging, include debug fields in the scan results"`
@@ -99,8 +101,8 @@ func (m *Module) Description() string {
 	return "Grab an FTP banner"
 }
 
-// Validate flags
-func (f *Flags) Validate(args []string) (err error) {
+// Execute flags
+func (f *Flags) Execute(args []string) (err error) {
 	if f.FTPAuthTLS && f.ImplicitTLS {
 		err = fmt.Errorf("Cannot specify both '--authtls' and '--implicit-tls' together")
 	}

@@ -8,10 +8,12 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
 	"github.com/zmap/zgrab2/lib/ssh"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 type SSHFlags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	ClientID          string `long:"client" description:"Specify the client ID string to use" default:"SSH-2.0-Go"`
 	KexAlgorithms     string `long:"kex-algorithms" description:"Set SSH Key Exchange Algorithms"`
 	HostKeyAlgorithms string `long:"host-key-algorithms" description:"Set SSH Host Key Algorithms"`
@@ -56,7 +58,7 @@ func (m *SSHModule) Description() string {
 	return "Fetch an SSH server banner and collect key exchange information"
 }
 
-func (f *SSHFlags) Validate(args []string) error {
+func (f *SSHFlags) Execute(args []string) error {
 	return nil
 }
 

@@ -14,12 +14,14 @@ package telnet
 import (
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // Flags holds the command-line configuration for the Telnet scan module.
 // Populated by the framework.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	MaxReadSize int  `long:"max-read-size" description:"Set the maximum number of bytes to read when grabbing the banner" default:"65536"`
 	Banner      bool `long:"force-banner" description:"Always return banner if it has non-zero bytes"`
 	Verbose     bool `long:"verbose" description:"More verbose logging, include debug fields in the scan results"`
@@ -61,7 +63,7 @@ func (module *Module) Description() string {
 // Validate checks that the flags are valid.
 // On success, returns nil.
 // On failure, returns an error instance describing the error.
-func (flags *Flags) Validate(args []string) error {
+func (flags *Flags) Execute(args []string) error {
 	return nil
 }
 

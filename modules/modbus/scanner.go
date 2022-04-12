@@ -26,12 +26,14 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // Flags holds the command-line configuration for the modbus scan module.
 // Populated by the framework.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	// Protocols that support TLS should include zgrab2.TLSFlags
 	UnitID    uint8  `long:"unit-id" description:"The UnitID / Station ID to probe"`
 	ObjectID  uint8  `long:"object-id" description:"The ObjectID of the object to be read." default:"0x00"`
@@ -73,10 +75,10 @@ func (module *Module) Description() string {
 	return "Probe for Modbus devices, usually PLCs as part of a SCADA system"
 }
 
-// Validate checks that the flags are valid.
+// Execute checks that the flags are valid.
 // On success, returns nil.
 // On failure, returns an error instance describing the error.
-func (flags *Flags) Validate(args []string) error {
+func (flags *Flags) Execute(args []string) error {
 	if flags.Verbose {
 		// If --verbose is set, do some extra checking but don't fail.
 		if flags.ObjectID >= 0x07 && flags.ObjectID < 0x80 {

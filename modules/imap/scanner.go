@@ -23,13 +23,15 @@
 package imap
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 
 	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // ScanResults instances are returned by the module's Scan function.
@@ -50,7 +52,7 @@ type ScanResults struct {
 // Flags holds the command-line configuration for the IMAP scan module.
 // Populated by the framework.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	zgrab2.TLSFlags
 
 	// SendCLOSE indicates that the CLOSE command should be sent.
@@ -99,10 +101,10 @@ func (module *Module) Description() string {
 	return "Fetch an IMAP banner, optionally over TLS"
 }
 
-// Validate checks that the flags are valid.
+// Execute checks that the flags are valid.
 // On success, returns nil.
 // On failure, returns an error instance describing the error.
-func (flags *Flags) Validate(args []string) error {
+func (flags *Flags) Execute(args []string) error {
 	if flags.StartTLS && flags.IMAPSecure {
 		log.Error("Cannot send both --starttls and --imaps")
 		return zgrab2.ErrInvalidArguments
@@ -154,18 +156,18 @@ func VerifyIMAPContents(banner string) zgrab2.ScanStatus {
 	lowerBanner := strings.ToLower(banner)
 	switch {
 	case strings.HasPrefix(banner, "* NO"),
-	     strings.HasPrefix(banner, "* BAD"):
+		strings.HasPrefix(banner, "* BAD"):
 		return zgrab2.SCAN_APPLICATION_ERROR
 	case strings.HasPrefix(banner, "* OK"),
-	     strings.HasPrefix(banner, "* PREAUTH"),
-	     strings.HasPrefix(banner, "* BYE"),
-	     strings.HasPrefix(banner, "* OKAY"),
-	     strings.Contains(banner, "IMAP"),
-	     strings.Contains(lowerBanner, "blacklist"),
-	     strings.Contains(lowerBanner, "abuse"),
-	     strings.Contains(lowerBanner, "rbl"),
-	     strings.Contains(lowerBanner, "spamhaus"),
-	     strings.Contains(lowerBanner, "relay"):
+		strings.HasPrefix(banner, "* PREAUTH"),
+		strings.HasPrefix(banner, "* BYE"),
+		strings.HasPrefix(banner, "* OKAY"),
+		strings.Contains(banner, "IMAP"),
+		strings.Contains(lowerBanner, "blacklist"),
+		strings.Contains(lowerBanner, "abuse"),
+		strings.Contains(lowerBanner, "rbl"),
+		strings.Contains(lowerBanner, "spamhaus"),
+		strings.Contains(lowerBanner, "relay"):
 		return zgrab2.SCAN_SUCCESS
 	default:
 		return zgrab2.SCAN_PROTOCOL_ERROR

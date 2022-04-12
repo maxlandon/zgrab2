@@ -8,6 +8,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
 	"gopkg.in/mgo.v2/bson"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // Module implements the zgrab2.Module interface
@@ -16,7 +18,7 @@ type Module struct {
 
 // Flags contains mongodb-specific command-line flags.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 }
 
 // Scanner implements the zgrab2.Scanner interface
@@ -185,8 +187,8 @@ func (scanner *Scanner) GetTrigger() string {
 	return scanner.config.Trigger
 }
 
-// Validate checks that the flags are valid
-func (flags *Flags) Validate(args []string) error {
+// Execute checks that the flags are valid
+func (flags *Flags) Execute(args []string) error {
 	return nil
 }
 

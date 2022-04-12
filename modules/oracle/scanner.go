@@ -26,6 +26,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // ScanResults instances are returned by the module's Scan function.
@@ -41,7 +43,7 @@ type ScanResults struct {
 // Flags holds the command-line configuration for the HTTP scan module.
 // Populated by the framework.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	zgrab2.TLSFlags
 
 	// Version is the client version number sent to the server in the Connect
@@ -130,7 +132,7 @@ func (module *Module) Description() string {
 // Validate checks that the flags are valid.
 // On success, returns nil.
 // On failure, returns an error instance describing the error.
-func (flags *Flags) Validate(args []string) error {
+func (flags *Flags) Execute(args []string) error {
 	u16Strings := map[string]string{
 		"global-service-options":   flags.GlobalServiceOptions,
 		"protocol-characteristics": flags.ProtocolCharacterisics,

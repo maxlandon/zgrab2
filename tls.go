@@ -14,6 +14,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zcrypto/tls"
 	"github.com/zmap/zcrypto/x509"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // Shared code for TLS scans.
@@ -310,7 +312,7 @@ func (conn *TLSConnection) Close() error {
 // Connect opens the TCP connection to the target using the given configuration,
 // and then returns the configured wrapped TLS connection. The caller must still
 // call Handshake().
-func (t *TLSFlags) Connect(target *ScanTarget, flags *BaseFlags) (*TLSConnection, error) {
+func (t *TLSFlags) Connect(target *ScanTarget, flags *mod.BaseFlags) (*TLSConnection, error) {
 	tcpConn, err := target.Open(flags)
 	if err != nil {
 		return nil, err

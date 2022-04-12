@@ -16,6 +16,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // ScanResults contains detailed information about each step of the
@@ -43,7 +45,7 @@ type ScanResults struct {
 
 // Flags defines the command-line configuration options for the module.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	zgrab2.TLSFlags
 	EncryptMode string `long:"encrypt-mode" description:"The type of encryption to request in the pre-login step. One of ENCRYPT_ON, ENCRYPT_OFF, ENCRYPT_NOT_SUP." default:"ENCRYPT_ON"`
 	Verbose     bool   `long:"verbose" description:"More verbose logging, include debug fields in the scan results"`
@@ -74,8 +76,8 @@ func (module *Module) Description() string {
 	return "Perform a handshake for MSSQL databases"
 }
 
-// Validate does nothing in this module.
-func (flags *Flags) Validate(args []string) error {
+// Execute does nothing in this module.
+func (flags *Flags) Execute(args []string) error {
 	return nil
 }
 

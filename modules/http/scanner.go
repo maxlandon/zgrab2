@@ -27,6 +27,8 @@ import (
 	"github.com/zmap/zgrab2"
 	"github.com/zmap/zgrab2/lib/http"
 	"golang.org/x/net/html/charset"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 var (
@@ -44,7 +46,7 @@ var (
 //
 // TODO: Custom headers?
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	zgrab2.TLSFlags
 	Method          string `long:"method" default:"GET" description:"Set HTTP request method type"`
 	Endpoint        string `long:"endpoint" default:"/" description:"Send an HTTP request to an endpoint"`
@@ -130,8 +132,8 @@ func (module *Module) Description() string {
 	return "Send an HTTP request and read the response, optionally following redirects."
 }
 
-// Validate performs any needed validation on the arguments
-func (flags *Flags) Validate(args []string) error {
+// Execute performs any needed validation on the arguments
+func (flags *Flags) Execute(args []string) error {
 	return nil
 }
 

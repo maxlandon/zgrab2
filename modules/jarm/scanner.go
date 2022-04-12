@@ -4,17 +4,20 @@ package jarm
 
 import (
 	_ "fmt"
-	jarm "github.com/RumbleDiscovery/jarm-go"
-	"github.com/zmap/zgrab2"
 	"log"
 	"net"
 	"strings"
 	"time"
+
+	jarm "github.com/RumbleDiscovery/jarm-go"
+	"github.com/zmap/zgrab2"
+
+	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
 // Flags give the command-line flags for the banner module.
 type Flags struct {
-	zgrab2.BaseFlags
+	mod.BaseFlags
 	MaxTries int `long:"max-tries" default:"1" description:"Number of tries for timeouts and connection errors before giving up."`
 }
 
@@ -81,8 +84,8 @@ func (m *Module) NewScanner() zgrab2.Scanner {
 	return new(Scanner)
 }
 
-// Validate validates the flags and returns nil on success.
-func (f *Flags) Validate(args []string) error {
+// Execute validates the flags and returns nil on success.
+func (f *Flags) Execute(args []string) error {
 	return nil
 }
 
