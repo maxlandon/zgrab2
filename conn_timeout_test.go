@@ -13,7 +13,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// Config for a single timeout test
+// Config for a single timeout test.
 type connTimeoutTestConfig struct {
 	// Name for the test for logging purposes
 	name string
@@ -62,7 +62,7 @@ const (
 	long   = 10000 * time.Millisecond
 )
 
-// enum type for the various locations where the test can fail
+// enum type for the various locations where the test can fail.
 type testStep string
 
 const (
@@ -100,7 +100,7 @@ func clientError(step testStep, err error) *timeoutTestError {
 	}
 }
 
-// Helper to ensure all data is written to a socket
+// Helper to ensure all data is written to a socket.
 func _write(writer io.Writer, data []byte) error {
 	n, err := writer.Write(data)
 	if err == nil && n != len(data) {
@@ -111,7 +111,7 @@ func _write(writer io.Writer, data []byte) error {
 
 // Run the configured server. As soon as it returns, it is listening.
 // Returns a channel that receives a timeoutTestError on error, or is closed on successful completion.
-func (cfg *connTimeoutTestConfig) runServer(t *testing.T) (chan *timeoutTestError) {
+func (cfg *connTimeoutTestConfig) runServer(t *testing.T) chan *timeoutTestError {
 	errorChan := make(chan *timeoutTestError)
 	if cfg.endpoint != "" {
 		// Only listen on localhost
@@ -155,7 +155,7 @@ func (cfg *connTimeoutTestConfig) runServer(t *testing.T) (chan *timeoutTestErro
 	return errorChan
 }
 
-// Get the configured endpoint
+// Get the configured endpoint.
 func (cfg *connTimeoutTestConfig) getEndpoint() string {
 	if cfg.endpoint != "" {
 		return cfg.endpoint
@@ -163,7 +163,7 @@ func (cfg *connTimeoutTestConfig) getEndpoint() string {
 	return fmt.Sprintf("127.0.0.1:%d", cfg.port)
 }
 
-// Dial a connection to the configured endpoint using a Dialer
+// Dial a connection to the configured endpoint using a Dialer.
 func (cfg *connTimeoutTestConfig) dialerDial() (*TimeoutConnection, error) {
 	dialer := NewDialer(&Dialer{
 		Timeout:        cfg.timeout,
@@ -178,7 +178,7 @@ func (cfg *connTimeoutTestConfig) dialerDial() (*TimeoutConnection, error) {
 	return ret.(*TimeoutConnection), err
 }
 
-// Dial a connection to the configured endpoint using a DialTimeoutConnectionEx
+// Dial a connection to the configured endpoint using a DialTimeoutConnectionEx.
 func (cfg *connTimeoutTestConfig) directDial() (*TimeoutConnection, error) {
 	ret, err := DialTimeoutConnectionEx("tcp", cfg.getEndpoint(), cfg.connectTimeout, cfg.timeout, cfg.readTimeout, cfg.writeTimeout, 0)
 	if err != nil {
@@ -187,7 +187,7 @@ func (cfg *connTimeoutTestConfig) directDial() (*TimeoutConnection, error) {
 	return ret.(*TimeoutConnection), err
 }
 
-// Dial a connection to the configured endpoint using Dialer.DialContext
+// Dial a connection to the configured endpoint using Dialer.DialContext.
 func (cfg *connTimeoutTestConfig) contextDial() (*TimeoutConnection, error) {
 	dialer := NewDialer(&Dialer{
 		Timeout:        cfg.timeout,
@@ -307,7 +307,7 @@ var connTestConfigs = []connTimeoutTestConfig{
 		serverToClientPayload: []byte("abc"),
 		clientToServerPayload: []byte("defghi"),
 
-		failStep: testStepConnect,
+		failStep:  testStepConnect,
 		failError: "i/o timeout",
 	},
 	// short session timeout, medium connect timeout, with connect to nonexistent endpoint.
@@ -326,7 +326,7 @@ var connTestConfigs = []connTimeoutTestConfig{
 		serverToClientPayload: []byte("abc"),
 		clientToServerPayload: []byte("defghi"),
 
-		failStep: testStepConnect,
+		failStep:  testStepConnect,
 		failError: "i/o timeout",
 	},
 	// Get an IO timeout on the read.

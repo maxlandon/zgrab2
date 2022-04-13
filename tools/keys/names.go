@@ -47,8 +47,10 @@ const (
 	BrainpoolP512r1 TLSCurveID = 28
 )
 
-var ecIDToName map[TLSCurveID]string
-var ecNameToID map[string]TLSCurveID
+var (
+	ecIDToName map[TLSCurveID]string
+	ecNameToID map[string]TLSCurveID
+)
 
 func init() {
 	ecIDToName = make(map[TLSCurveID]string, 64)

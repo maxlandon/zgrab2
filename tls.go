@@ -28,7 +28,7 @@ import (
 // result.tls = tlsConnection.GetLog()
 
 // Common flags for TLS configuration -- include this in your module's ScanFlags implementation to use the common TLS code
-// Adapted from modules/ssh.go
+// Adapted from modules/ssh.go.
 type TLSFlags struct {
 	Heartbleed bool `long:"heartbleed" description:"Check if server is vulnerable to Heartbleed"`
 
@@ -171,7 +171,7 @@ func (t *TLSFlags) GetTLSConfigForTarget(target *ScanTarget) (*tls.Config, error
 			ret.CipherSuites = cipherMap[t.CipherSuite]
 		} else {
 			strCiphers := getCSV(t.CipherSuite)
-			var intCiphers = make([]uint16, len(strCiphers))
+			intCiphers := make([]uint16, len(strCiphers))
 			for i, s := range strCiphers {
 				s = strings.TrimPrefix(s, "0x")
 				v64, err := strconv.ParseUint(s, 16, 16)

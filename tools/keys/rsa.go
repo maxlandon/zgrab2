@@ -36,7 +36,7 @@ type RSAClientParams struct {
 	EncryptedPMS []byte `json:"encrypted_pre_master_secret,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshal interface
+// MarshalJSON implements the json.Marshal interface.
 func (rp *RSAPublicKey) MarshalJSON() ([]byte, error) {
 	var aux auxRSAPublicKey
 	if rp.PublicKey != nil {
@@ -47,7 +47,7 @@ func (rp *RSAPublicKey) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&aux)
 }
 
-// UnmarshalJSON implements the json.Unmarshal interface
+// UnmarshalJSON implements the json.Unmarshal interface.
 func (rp *RSAPublicKey) UnmarshalJSON(b []byte) error {
 	var aux auxRSAPublicKey
 	if err := json.Unmarshal(b, &aux); err != nil {

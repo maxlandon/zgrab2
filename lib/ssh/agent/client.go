@@ -80,20 +80,20 @@ const (
 	agentRequestV1Identities   = 1
 	agentRemoveAllV1Identities = 9
 
-	// 3.2 Requests from client to agent for protocol 2 key operations
+	// 3.2 Requests from client to agent for protocol 2 key operations.
 	agentAddIdentity         = 17
 	agentRemoveIdentity      = 18
 	agentRemoveAllIdentities = 19
 	agentAddIdConstrained    = 25
 
-	// 3.3 Key-type independent requests from client to agent
+	// 3.3 Key-type independent requests from client to agent.
 	agentAddSmartcardKey            = 20
 	agentRemoveSmartcardKey         = 21
 	agentLock                       = 22
 	agentUnlock                     = 23
 	agentAddSmartcardKeyConstrained = 26
 
-	// 3.7 Key constraint identifiers
+	// 3.7 Key constraint identifiers.
 	agentConstrainLifetime = 1
 	agentConstrainConfirm  = 2
 )
@@ -106,7 +106,7 @@ const maxAgentResponseBytes = 16 << 20
 // These structures mirror the wire format of the corresponding ssh agent
 // messages found in [PROTOCOL.agent].
 
-// 3.4 Generic replies from agent to client
+// 3.4 Generic replies from agent to client.
 const agentFailure = 5
 
 type failureAgentMsg struct{}
@@ -139,7 +139,7 @@ type signRequestAgentMsg struct {
 
 // See [PROTOCOL.agent], section 2.6.2.
 
-// 3.6 Replies from agent to client for protocol 2 key operations
+// 3.6 Replies from agent to client for protocol 2 key operations.
 const agentSignResponse = 14
 
 type signResponseAgentMsg struct {

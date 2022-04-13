@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net"
 	"strings"
-
 	"unicode/utf16"
 
 	"github.com/zmap/zgrab2/lib/smb/gss"
@@ -92,7 +91,7 @@ type SessionSetupLog struct {
 // SMB 2.1.0
 // SMB 3.0.0
 // SMB 3.0.2
-// SMB 3.1.1
+// SMB 3.1.1.
 type SMBVersions struct {
 	Major     uint8  `json:"major"`
 	Minor     uint8  `json:"minor"`
@@ -168,7 +167,7 @@ type LoggedSession struct {
 }
 
 // zschema doesn't support uint64, so convert this into a standard 32-bit
-// timestamp
+// timestamp.
 func getTime(time uint64) uint32 {
 	// SMB timestamps are tenths of a millisecond since 1/1/1601.
 	// Between Jan 1, 1601 and Jan 1, 1970, you have 369 complete years, of
@@ -258,10 +257,12 @@ func (ls *LoggedSession) LoggedNegotiateProtocolv1(setup bool) error {
 	// log that this is an SMB1 server even if the full unmarshal fails.
 	if string(buf[0:4]) == ProtocolSmb {
 		ls.Log.SupportV1 = true
-		ls.Log.Version = &SMBVersions{Major: 1,
+		ls.Log.Version = &SMBVersions{
+			Major:     1,
 			Minor:     0,
 			Revision:  0,
-			VerString: "SMB 1.0"}
+			VerString: "SMB 1.0",
+		}
 	} else {
 		return fmt.Errorf("Invalid v1 Protocol ID\n")
 	}
@@ -366,10 +367,12 @@ func (ls *LoggedSession) LoggedNegotiateProtocol(setup bool) error {
 	switch string(negRes.Header.ProtocolID) {
 	case ProtocolSmb:
 		ls.Log.SupportV1 = true
-		ls.Log.Version = &SMBVersions{Major: 1,
+		ls.Log.Version = &SMBVersions{
+			Major:     1,
 			Minor:     0,
 			Revision:  0,
-			VerString: "SMB 1.0"}
+			VerString: "SMB 1.0",
+		}
 	case ProtocolSmb2:
 		major := uint8(0x0f & (negRes.DialectRevision >> 8))
 		minor := uint8(0x0f & (negRes.DialectRevision >> 4))
@@ -377,7 +380,7 @@ func (ls *LoggedSession) LoggedNegotiateProtocol(setup bool) error {
 		caps := negRes.Capabilities
 		ls.Log.Version = &SMBVersions{}
 		// Intentional cascading fallthroughs on the dialect revision, to match
-		// the description in [MS-SMB2] Sect. 2.2.4. The Capabilites flags are
+		// the description in [MS-SMB2] Sect. 2.2.4. The Capabilities flags are
 		// masked based on what capabilities are valid to infer based on the
 		// server version.
 		switch negRes.DialectRevision {

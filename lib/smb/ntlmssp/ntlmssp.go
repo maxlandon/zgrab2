@@ -6,11 +6,10 @@ import (
 	"crypto/md5"
 	"crypto/rand"
 	"encoding/binary"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"time"
-
-	"encoding/hex"
 
 	"github.com/zmap/zgrab2/lib/smb/smb/encoder"
 )

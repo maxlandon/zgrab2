@@ -154,7 +154,6 @@ func testAgentInterface(t *testing.T, agent Agent, key interface{}, cert *ssh.Ce
 			t.Fatalf("key not expired")
 		}
 	}
-
 }
 
 func DISABLED_TestAgent(t *testing.T) {

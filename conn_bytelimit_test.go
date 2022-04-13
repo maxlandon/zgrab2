@@ -52,7 +52,7 @@ type timeoutConnector interface {
 	getConfig() readLimitTestConfig
 }
 
-// Config for a test case
+// Config for a test case.
 type readLimitTestConfig struct {
 	// The maximum bytes the connection should read
 	limit int
@@ -174,7 +174,7 @@ func sendReceive(t *testing.T, conn *TimeoutConnection, size int) ([]byte, error
 	return readBuf[0:n], err
 }
 
-// Get a size-byte slice of sequential bytes (mod 256), starting from 0
+// Get a size-byte slice of sequential bytes (mod 256), starting from 0.
 func getTestBuffer(size int) []byte {
 	ret := make([]byte, size)
 	for i := 0; i < size; i++ {
@@ -214,7 +214,7 @@ func (cfg readLimitTestConfig) runMultiSend(t *testing.T, conn *TimeoutConnectio
 	return nil
 }
 
-// A timeoutConnector that uses a dialer to dial the connections
+// A timeoutConnector that uses a dialer to dial the connections.
 type dialerConnector struct {
 	readLimitTestConfig
 
@@ -222,10 +222,10 @@ type dialerConnector struct {
 	dialer *Dialer
 }
 
-// Function that returns a connector
+// Function that returns a connector.
 type timeoutConnectorFactory func(readLimitTestConfig) timeoutConnector
 
-// Dial the connection using the dialer (creating the dialer if necessary)
+// Dial the connection using the dialer (creating the dialer if necessary).
 func (d *dialerConnector) connect(ctx context.Context, t *testing.T, port int, idx int) (*TimeoutConnection, error) {
 	if d.dialer == nil {
 		d.dialer = NewDialer(&Dialer{
@@ -251,7 +251,7 @@ func dialerTimeoutConnectorFactory(cfg readLimitTestConfig) timeoutConnector {
 	}
 }
 
-// Dial using a direct call to DialTimeoutConnectionEx
+// Dial using a direct call to DialTimeoutConnectionEx.
 type directDial struct {
 	readLimitTestConfig
 }
@@ -322,7 +322,7 @@ var readLimitTestConfigs = map[string]readLimitTestConfig{
 	},
 }
 
-// Each of these gets run with each readLimitTestConfig
+// Each of these gets run with each readLimitTestConfig.
 var connTestConnectors = map[string]timeoutConnectorFactory{
 	"directDial":      directDialFactory,
 	"dialerConnector": dialerTimeoutConnectorFactory,
@@ -376,7 +376,7 @@ func testBytesReadLimitOn(t *testing.T, connector timeoutConnector) error {
 // 3. Send the configured number of bytes in a single packet
 // 4. Check that it (succeeds / truncates / errors / panics) according to the config
 // 5. Repeat 10 times
-// 6. Repeat the above 10 more times, except in #3, split the send across five packets
+// 6. Repeat the above 10 more times, except in #3, split the send across five packets.
 func TestBytesReadLimit(t *testing.T) {
 	connectors := make(map[string]timeoutConnector)
 	// Create a fresh connector for each configuration

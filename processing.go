@@ -11,14 +11,14 @@ import (
 	mod "github.com/zmap/zgrab2/modules/flags"
 )
 
-// Grab contains all scan responses for a single host
+// Grab contains all scan responses for a single host.
 type Grab struct {
 	IP     string                  `json:"ip,omitempty"`
 	Domain string                  `json:"domain,omitempty"`
 	Data   map[string]ScanResponse `json:"data,omitempty"`
 }
 
-// ScanTarget is the host that will be scanned
+// ScanTarget is the host that will be scanned.
 type ScanTarget struct {
 	IP     net.IP
 	Domain string
@@ -149,12 +149,12 @@ func EncodeGrab(raw *Grab, includeDebug bool) ([]byte, error) {
 	return json.Marshal(outputData)
 }
 
-// grabTarget calls handler for each action
+// grabTarget calls handler for each action.
 func grabTarget(input ScanTarget, m *Monitor) []byte {
 	moduleResult := make(map[string]ScanResponse)
 
 	for _, scannerName := range orderedScanners {
-		scanner := scanners[scannerName]
+		scanner := scansQueued[scannerName]
 		trigger := (*scanner).GetTrigger()
 		if input.Tag != trigger {
 			continue
@@ -191,7 +191,6 @@ func Process(mon *Monitor) {
 	processQueue := make(chan ScanTarget, workers*4)
 	outputQueue := make(chan []byte, workers*4)
 
-	//Create wait groups
 	var workerDone sync.WaitGroup
 	var outputDone sync.WaitGroup
 	workerDone.Add(int(workers))
@@ -204,11 +203,11 @@ func Process(mon *Monitor) {
 			log.Fatal(err)
 		}
 	}()
-	//Start all the workers
+
 	for i := 0; i < workers; i++ {
 		go func(i int) {
 			for _, scannerName := range orderedScanners {
-				scanner := *scanners[scannerName]
+				scanner := *scansQueued[scannerName]
 				scanner.InitPerSender(i)
 			}
 			for obj := range processQueue {

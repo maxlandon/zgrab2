@@ -9,14 +9,18 @@ import (
 	"github.com/zmap/zgrab2/lib/smb/smb/encoder"
 )
 
-const ProtocolSmb = "\xFFSMB"
-const ProtocolSmb2 = "\xFESMB"
+const (
+	ProtocolSmb  = "\xFFSMB"
+	ProtocolSmb2 = "\xFESMB"
+)
 
-const StatusOk = 0x00000000
-const StatusMoreProcessingRequired = 0xc0000016
-const StatusInvalidParameter = 0xc000000d
-const StatusLogonFailure = 0xc000006d
-const StatusUserSessionDeleted = 0xc0000203
+const (
+	StatusOk                     = 0x00000000
+	StatusMoreProcessingRequired = 0xc0000016
+	StatusInvalidParameter       = 0xc000000d
+	StatusLogonFailure           = 0xc000006d
+	StatusUserSessionDeleted     = 0xc0000203
+)
 
 var StatusMap = map[uint32]string{
 	StatusOk:                     "OK",
@@ -26,12 +30,14 @@ var StatusMap = map[uint32]string{
 	StatusUserSessionDeleted:     "User session deleted",
 }
 
-const DialectSmb_2_0_2 = 0x0202
-const DialectSmb_2_1 = 0x0210
-const DialectSmb_3_0 = 0x0300
-const DialectSmb_3_0_2 = 0x0302
-const DialectSmb_3_1_1 = 0x0311
-const DialectSmb2_ALL = 0x02FF
+const (
+	DialectSmb_2_0_2 = 0x0202
+	DialectSmb_2_1   = 0x0210
+	DialectSmb_3_0   = 0x0300
+	DialectSmb_3_0_2 = 0x0302
+	DialectSmb_3_1_1 = 0x0311
+	DialectSmb2_ALL  = 0x02FF
+)
 
 const DialectSmb_1_0 = "\x02NT LM 0.12\x00"
 
@@ -170,7 +176,7 @@ type NegotiateResV1 struct {
 	ServerTimezon   uint16
 	ChallengeLength uint8
 	ByteCount       uint16 `smb:"len:VarData"`
-	VarData []byte
+	VarData         []byte
 }
 
 type NegotiateReq struct {

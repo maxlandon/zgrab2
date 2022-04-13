@@ -26,7 +26,6 @@ func Lmowfv2(pass, user, domain string) []byte {
 }
 
 func ComputeResponseNTLMv2(nthash, lmhash, clientChallenge, serverChallenge, timestamp, serverName []byte) []byte {
-
 	temp := []byte{1, 1}
 	temp = append(temp, 0, 0, 0, 0, 0, 0)
 	temp = append(temp, timestamp...)

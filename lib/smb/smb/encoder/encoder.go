@@ -461,7 +461,6 @@ func unmarshal(buf []byte, v interface{}, meta *Metadata) (interface{}, error) {
 	}
 
 	return nil, nil
-
 }
 
 func Unmarshal(buf []byte, v interface{}) error {

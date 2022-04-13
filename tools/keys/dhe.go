@@ -42,7 +42,7 @@ type auxDHParams struct {
 	SessionKey    *cryptoParameter `json:"session_key,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshal interface
+// MarshalJSON implements the json.Marshal interface.
 func (p *DHParams) MarshalJSON() ([]byte, error) {
 	aux := auxDHParams{
 		Prime:     &cryptoParameter{Int: p.Prime},
@@ -66,7 +66,7 @@ func (p *DHParams) MarshalJSON() ([]byte, error) {
 	return json.Marshal(aux)
 }
 
-// UnmarshalJSON implement the json.Unmarshaler interface
+// UnmarshalJSON implement the json.Unmarshaler interface.
 func (p *DHParams) UnmarshalJSON(b []byte) error {
 	var aux auxDHParams
 	if err := json.Unmarshal(b, &aux); err != nil {
@@ -108,7 +108,7 @@ type auxCryptoParameter struct {
 	Length int    `json:"length"`
 }
 
-// MarshalJSON implements the json.Marshaler interface
+// MarshalJSON implements the json.Marshaler interface.
 func (p *cryptoParameter) MarshalJSON() ([]byte, error) {
 	var aux auxCryptoParameter
 	if p.Int != nil {
@@ -118,7 +118,7 @@ func (p *cryptoParameter) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&aux)
 }
 
-// UnmarshalJSON implements the json.Unmarshal interface
+// UnmarshalJSON implements the json.Unmarshal interface.
 func (p *cryptoParameter) UnmarshalJSON(b []byte) error {
 	var aux auxCryptoParameter
 	if err := json.Unmarshal(b, &aux); err != nil {

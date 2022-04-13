@@ -133,7 +133,6 @@ func (processor *Processor) shouldWipeField(parent reflect.Value, index int) boo
 
 	// Rather than zeroing out nil values, handle them at the outer level
 	if isNil(parent.Field(index)) {
-		//fmt.Printf("Bogus copy becase nil: %s (%#v) to zero\n", processor.getPath(), tField)
 		return false
 	}
 
@@ -175,7 +174,6 @@ func (processor *Processor) processStruct(v reflect.Value) reflect.Value {
 func (processor *Processor) processPtr(v reflect.Value) reflect.Value {
 	ret := reflect.New(v.Type().Elem()).Elem()
 	if v.IsNil() {
-		//fmt.Println("Goodbye to ", processor.getPath())
 		return ret.Addr()
 	}
 	processor.pushPath("*", v.Elem())

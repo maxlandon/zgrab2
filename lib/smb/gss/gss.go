@@ -7,13 +7,17 @@ import (
 	"github.com/zmap/zgrab2/lib/smb/smb/encoder"
 )
 
-const SpnegoOid = "1.3.6.1.5.5.2"
-const NtLmSSPMechTypeOid = "1.3.6.1.4.1.311.2.2.10"
+const (
+	SpnegoOid          = "1.3.6.1.5.5.2"
+	NtLmSSPMechTypeOid = "1.3.6.1.4.1.311.2.2.10"
+)
 
-const GssStateAcceptCompleted = 0
-const GssStateAcceptIncomplete = 1
-const GssStateReject = 2
-const GssStateRequestMic = 3
+const (
+	GssStateAcceptCompleted  = 0
+	GssStateAcceptIncomplete = 1
+	GssStateReject           = 2
+	GssStateRequestMic       = 3
+)
 
 type NegTokenInitData struct {
 	MechTypes    []asn1.ObjectIdentifier `asn1:"explicit,tag:0"`
@@ -35,8 +39,8 @@ type NegTokenResp struct {
 }
 
 // gsswrapped used to force ASN1 encoding to include explicit sequence tags
-// Type does not fulfill the BinaryMarshallable interfce and is used only as a
-// helper to marshal a NegTokenResp
+// Type does not fulfill the BinaryMarshallable interface and is used only as a
+// helper to marshal a NegTokenResp.
 type gsswrapped struct{ G interface{} }
 
 func NewNegTokenInit() (NegTokenInit, error) {

@@ -5,7 +5,7 @@ import (
 )
 
 // Monitor is a collection of states per scans and a channel to communicate
-// those scans to the monitor
+// those scans to the monitor.
 type Monitor struct {
 	states       map[string]*State
 	statusesChan chan moduleStatus
@@ -14,7 +14,7 @@ type Monitor struct {
 }
 
 // State contains the respective number of successes and failures
-// for a given scan
+// for a given scan.
 type State struct {
 	Successes uint `json:"successes"`
 	Failures  uint `json:"failures"`
@@ -33,7 +33,7 @@ const (
 )
 
 // GetStatuses returns a mapping from scanner names to the current number
-// of successes and failures for that scanner
+// of successes and failures for that scanner.
 func (m *Monitor) GetStatuses() map[string]*State {
 	return m.states
 }
@@ -46,7 +46,7 @@ func (m *Monitor) Stop() {
 }
 
 // MakeMonitor returns a Monitor object that can be used to collect and send
-// the status of a running scan
+// the status of a running scan.
 func MakeMonitor(statusChanSize int, wg *sync.WaitGroup) *Monitor {
 	m := new(Monitor)
 	m.statusesChan = make(chan moduleStatus, statusChanSize)

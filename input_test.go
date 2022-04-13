@@ -153,15 +153,15 @@ example.com
 2.2.2.2/30,, tag`
 
 	expected := []ScanTarget{
-		ScanTarget{IP: net.ParseIP("10.0.0.1"), Domain: "example.com", Tag: "tag"},
-		ScanTarget{IP: net.ParseIP("10.0.0.1"), Domain: "example.com"},
-		ScanTarget{IP: net.ParseIP("10.0.0.1")},
-		ScanTarget{Domain: "example.com"},
-		ScanTarget{Domain: "example.com"},
-		ScanTarget{IP: net.ParseIP("2.2.2.0"), Tag: "tag"},
-		ScanTarget{IP: net.ParseIP("2.2.2.1"), Tag: "tag"},
-		ScanTarget{IP: net.ParseIP("2.2.2.2"), Tag: "tag"},
-		ScanTarget{IP: net.ParseIP("2.2.2.3"), Tag: "tag"},
+		{IP: net.ParseIP("10.0.0.1"), Domain: "example.com", Tag: "tag"},
+		{IP: net.ParseIP("10.0.0.1"), Domain: "example.com"},
+		{IP: net.ParseIP("10.0.0.1")},
+		{Domain: "example.com"},
+		{Domain: "example.com"},
+		{IP: net.ParseIP("2.2.2.0"), Tag: "tag"},
+		{IP: net.ParseIP("2.2.2.1"), Tag: "tag"},
+		{IP: net.ParseIP("2.2.2.2"), Tag: "tag"},
+		{IP: net.ParseIP("2.2.2.3"), Tag: "tag"},
 	}
 
 	ch := make(chan ScanTarget, 0)

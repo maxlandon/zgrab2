@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build darwin || dragonfly || freebsd || linux || netbsd || openbsd || plan9
 // +build darwin dragonfly freebsd linux netbsd openbsd plan9
 
 package test
@@ -213,7 +214,7 @@ func (s *server) Shutdown() {
 }
 
 func writeFile(path string, contents []byte) {
-	f, err := os.OpenFile(path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0600)
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0o600)
 	if err != nil {
 		panic(err)
 	}

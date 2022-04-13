@@ -40,13 +40,13 @@ type ECDHParams struct {
 	ClientPrivate *ECDHPrivateParams `json:"client_private,omitempty"`
 }
 
-// ECPoint represents an elliptic curve point and serializes nicely to JSON
+// ECPoint represents an elliptic curve point and serializes nicely to JSON.
 type ECPoint struct {
 	X *big.Int
 	Y *big.Int
 }
 
-// MarshalJSON implements the json.Marshler interface
+// MarshalJSON implements the json.Marshler interface.
 func (p *ECPoint) MarshalJSON() ([]byte, error) {
 	aux := struct {
 		X *cryptoParameter `json:"x"`
@@ -58,7 +58,7 @@ func (p *ECPoint) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&aux)
 }
 
-// UnmarshalJSON implements the json.Unmarshler interface
+// UnmarshalJSON implements the json.Unmarshler interface.
 func (p *ECPoint) UnmarshalJSON(b []byte) error {
 	aux := struct {
 		X *cryptoParameter `json:"x"`
@@ -81,7 +81,7 @@ func (c *TLSCurveID) Description() string {
 	return "unknown"
 }
 
-// MarshalJSON implements the json.Marshaler interface
+// MarshalJSON implements the json.Marshaler interface.
 func (c *TLSCurveID) MarshalJSON() ([]byte, error) {
 	aux := struct {
 		Name string `json:"name"`
@@ -93,7 +93,6 @@ func (c *TLSCurveID) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&aux)
 }
 
-//UnmarshalJSON implements the json.Unmarshaler interface
 func (c *TLSCurveID) UnmarshalJSON(b []byte) error {
 	aux := struct {
 		ID uint16 `json:"id"`

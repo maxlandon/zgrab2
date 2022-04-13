@@ -45,7 +45,7 @@ var (
 var ErrReadLimitExceeded = errors.New("read limit exceeded")
 
 // TimeoutConnection wraps an existing net.Conn connection, overriding the Read/Write methods to use the configured timeouts
-// TODO: Refactor this into TimeoutConnection, BoundedReader, LoggedReader, etc
+// TODO: Refactor this into TimeoutConnection, BoundedReader, LoggedReader, etc.
 type TimeoutConnection struct {
 	net.Conn
 	ctx                     context.Context
@@ -62,7 +62,7 @@ type TimeoutConnection struct {
 	explicitDeadline        bool
 }
 
-// TimeoutConnection.Read calls Read() on the underlying connection, using any configured deadlines
+// TimeoutConnection.Read calls Read() on the underlying connection, using any configured deadlines.
 func (c *TimeoutConnection) Read(b []byte) (n int, err error) {
 	if err := c.checkContext(); err != nil {
 		return 0, err
@@ -164,7 +164,7 @@ func (c *TimeoutConnection) SetDeadline(deadline time.Time) error {
 	return nil
 }
 
-// GetTimeoutDialFunc returns a DialFunc that dials with the given timeout
+// GetTimeoutDialFunc returns a DialFunc that dials with the given timeout.
 func GetTimeoutDialFunc(timeout time.Duration) func(string, string) (net.Conn, error) {
 	return func(proto, target string) (net.Conn, error) {
 		return DialTimeoutConnection(proto, target, timeout, 0)

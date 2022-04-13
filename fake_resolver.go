@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"golang.org/x/net/dns/dnsmessage"
 	"net"
 	"time"
+
+	"golang.org/x/net/dns/dnsmessage"
 )
 
 // Fake DNS Resolver, to force a DNS lookup to return a pinned address
@@ -42,7 +43,6 @@ type FakeDNSServer struct {
 // is received, we will only return the IP if what we have to return is
 // ipv4.  The same for TypeAAAA and ipv6.
 func (f *FakeDNSServer) fakeDNS(s string, dmsg dnsmessage.Message) (r dnsmessage.Message, err error) {
-
 	r = dnsmessage.Message{
 		Header: dnsmessage.Header{
 			ID:       dmsg.ID,
@@ -93,10 +93,10 @@ func (f *FakeDNSServer) fakeDNS(s string, dmsg dnsmessage.Message) (r dnsmessage
 }
 
 // This merely wraps a custom net.Conn, that is only good for DNS
-// messages
+// messages.
 func (f *FakeDNSServer) DialContext(ctx context.Context, network,
-	address string) (net.Conn, error) {
-
+	address string,
+) (net.Conn, error) {
 	conn := &fakeDNSPacketConn{
 		fakeDNSConn: fakeDNSConn{
 			server:  f,

@@ -95,7 +95,7 @@ func (r *keyring) Lock(passphrase []byte) error {
 	return nil
 }
 
-// Unlock undoes the effect of Lock
+// Unlock undoes the effect of Lock.
 func (r *keyring) Unlock(passphrase []byte) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -138,7 +138,8 @@ func (r *keyring) List() ([]*Key, error) {
 		ids = append(ids, &Key{
 			Format:  pub.Type(),
 			Blob:    pub.Marshal(),
-			Comment: k.comment})
+			Comment: k.comment,
+		})
 	}
 	return ids, nil
 }
@@ -153,7 +154,6 @@ func (r *keyring) Add(key AddedKey) error {
 		return errLocked
 	}
 	signer, err := ssh.NewSignerFromKey(key.PrivateKey)
-
 	if err != nil {
 		return err
 	}
