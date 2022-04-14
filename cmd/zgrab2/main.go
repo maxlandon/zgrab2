@@ -21,13 +21,15 @@ import (
 // in the server package.
 func main() {
 	// Generate the completions for the entire zgrab2 application.
+	// TODO: use the actual config for this, will be needed long term.
 	gcomp.Generate(local.Zgrab, &module.Config{}, nil)
 
 	// The root command will roughly follow these steps:
 	// 1 - simply parses the command-line flags (no exec)
 	// 2 - finds the command invoked (eg. ssh/http/multiple)
 	// 3 - passes the struct flags to the corresponding scanner.
-	// 4 - Runs the scanners that we have set up in 3).
+	// 4 - Runs the scanners that we have set up in 3), regardless
+	//     of if there was 1 <ssh> command, or 100 scans with <multiple>
 	if err := local.Zgrab.Execute(); err != nil {
 		log.Fatal(err)
 	}
