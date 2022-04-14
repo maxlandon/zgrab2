@@ -8,7 +8,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zgrab2/lib/output"
-	mod "github.com/zmap/zgrab2/modules/flags"
+	mod "github.com/zmap/zgrab2/module"
 )
 
 // Grab contains all scan responses for a single host.
@@ -57,7 +57,7 @@ func (target *ScanTarget) Host() string {
 }
 
 // Open connects to the ScanTarget using the configured flags, and returns a net.Conn that uses the configured timeouts for Read/Write operations.
-func (target *ScanTarget) Open(flags *mod.BaseFlags) (net.Conn, error) {
+func (target *ScanTarget) Open(flags *mod.Base) (net.Conn, error) {
 	var port uint
 	// If the port is supplied in ScanTarget, let that override the cmdline option
 	if target.Port != nil {
@@ -73,7 +73,7 @@ func (target *ScanTarget) Open(flags *mod.BaseFlags) (net.Conn, error) {
 // OpenTLS connects to the ScanTarget using the configured flags, then performs
 // the TLS handshake. On success error is nil, but the connection can be non-nil
 // even if there is an error (this allows fetching the handshake log).
-func (target *ScanTarget) OpenTLS(baseFlags *mod.BaseFlags, tlsFlags *TLSFlags) (*TLSConnection, error) {
+func (target *ScanTarget) OpenTLS(baseFlags *mod.Base, tlsFlags *TLSFlags) (*TLSConnection, error) {
 	conn, err := tlsFlags.Connect(target, baseFlags)
 	if err != nil {
 		return conn, err
@@ -84,7 +84,7 @@ func (target *ScanTarget) OpenTLS(baseFlags *mod.BaseFlags, tlsFlags *TLSFlags) 
 
 // OpenUDP connects to the ScanTarget using the configured flags, and returns a net.Conn that uses the configured timeouts for Read/Write operations.
 // Note that the UDP "connection" does not have an associated timeout.
-func (target *ScanTarget) OpenUDP(flags *mod.BaseFlags, udp *mod.UDPFlags) (net.Conn, error) {
+func (target *ScanTarget) OpenUDP(flags *mod.Base, udp *mod.UDP) (net.Conn, error) {
 	var port uint
 	// If the port is supplied in ScanTarget, let that override the cmdline option
 	if target.Port != nil {
@@ -153,8 +153,8 @@ func EncodeGrab(raw *Grab, includeDebug bool) ([]byte, error) {
 func grabTarget(input ScanTarget, m *Monitor) []byte {
 	moduleResult := make(map[string]ScanResponse)
 
-	for _, scannerName := range orderedScanners {
-		scanner := scansQueued[scannerName]
+	for _, scannerName := range scans.ordered {
+		scanner := scans.queued[scannerName]
 		trigger := (*scanner).GetTrigger()
 		if input.Tag != trigger {
 			continue
@@ -206,8 +206,8 @@ func Process(mon *Monitor) {
 
 	for i := 0; i < workers; i++ {
 		go func(i int) {
-			for _, scannerName := range orderedScanners {
-				scanner := *scansQueued[scannerName]
+			for _, scannerName := range scans.ordered {
+				scanner := *scans.queued[scannerName]
 				scanner.InitPerSender(i)
 			}
 			for obj := range processQueue {

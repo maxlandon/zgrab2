@@ -4,58 +4,12 @@ import (
 	"errors"
 	"net"
 	"regexp"
-	"strconv"
+	"runtime/debug"
 	"strings"
-
 	"time"
 
-	"runtime/debug"
-
-	"github.com/maxlandon/go-flags"
 	"github.com/sirupsen/logrus"
-	// "github.com/jessevdk/go-flags"
 )
-
-var parser *flags.Parser
-
-func init() {
-	parser = flags.NewParser(&config, flags.Default)
-}
-
-// NewIniParser creates and returns a ini parser initialized
-// with the default parser
-func NewIniParser() *flags.IniParser {
-	return flags.NewIniParser(parser)
-}
-
-// AddGroup exposes the parser's AddGroup function, allowing extension
-// of the global arguments.
-func AddGroup(shortDescription string, longDescription string, data interface{}) {
-	parser.AddGroup(shortDescription, longDescription, data)
-}
-
-// AddCommand adds a module to the parser and returns a pointer to
-// a flags.command object or an error
-func AddCommand(command string, shortDescription string, longDescription string, port int, m ScanModule) (*flags.Command, error) {
-	cmd, err := parser.AddCommand(command, shortDescription, longDescription, m.NewFlags())
-	if err != nil {
-		return nil, err
-	}
-	cmd.FindOptionByLongName("port").Default = []string{strconv.FormatUint(uint64(port), 10)}
-	cmd.FindOptionByLongName("name").Default = []string{command}
-	modules[command] = m
-	return cmd, nil
-}
-
-// ParseArgs - Returns the active command of the parser, that is,
-// the command that the user entered, like `zgrab2 ssh`.
-func ParseArgs(args []string) (cmd *flags.Command, err error) {
-	_, err = parser.ParseArgs(args)
-	if err == nil {
-		validateFrameworkConfiguration()
-	}
-	return parser.Active, err
-}
 
 // ReadAvailable reads what it can without blocking for more than
 // defaultReadTimeout per read, or defaultTotalTimeout for the whole session.
@@ -155,7 +109,7 @@ func ReadAvailableWithOptions(conn net.Conn, bufferSize int, readTimeout time.Du
 
 var InsufficientBufferError = errors.New("not enough buffer space")
 
-// ReadUntilRegex calls connection.Read() until it returns an error, or the cumulatively-read data matches the given regexp
+// ReadUntilRegex calls connection.Read() until it returns an error, or the cumulatively-read data matches the given regexp.
 func ReadUntilRegex(connection net.Conn, res []byte, expr *regexp.Regexp) (int, error) {
 	buf := res[0:]
 	length := 0
@@ -176,7 +130,7 @@ func ReadUntilRegex(connection net.Conn, res []byte, expr *regexp.Regexp) (int, 
 	return length, nil
 }
 
-// TLDMatches checks for a strict TLD match
+// TLDMatches checks for a strict TLD match.
 func TLDMatches(host1 string, host2 string) bool {
 	splitStr1 := strings.Split(stripPortNumber(host1), ".")
 	splitStr2 := strings.Split(stripPortNumber(host2), ".")

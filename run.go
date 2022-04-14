@@ -15,6 +15,9 @@ import (
 
 // RunScans prepares a scan Monitor, and run all the registered scans.
 func RunScans() (err error) {
+	// Statistics & performance
+	StartStats()
+	defer DumpStats()
 
 	wg := sync.WaitGroup{}
 	monitor := MakeMonitor(1, &wg)
@@ -41,13 +44,13 @@ func RunScans() (err error) {
 	return
 }
 
-// StartStats - Calls all functions need to profile the scan process
+// StartStats - Calls all functions need to profile the scan process.
 func StartStats() {
 	startCPUProfile()
 }
 
 // DumpStats - To be called in a defer statement, will
-// dump all data related to scan process profiling
+// dump all data related to scan process profiling.
 func DumpStats() {
 	stopCPUProfile()
 	dumpHeapProfile()

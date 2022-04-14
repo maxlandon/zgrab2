@@ -11,7 +11,7 @@ import (
 )
 
 // Config is the high level framework options that will be parsed
-// from the command line
+// from the command line.
 type Config struct {
 	OutputFileName     string          `short:"o" long:"output-file" default:"-" description:"Output filename, use - for stdout"`
 	InputFileName      string          `short:"f" long:"input-file" default:"-" description:"Input filename, use - for stdin"`
@@ -52,7 +52,11 @@ func init() {
 
 var config Config
 
-func validateFrameworkConfiguration() {
+func GetConfig() *Config {
+	return &config
+}
+
+func ValidateFrameworkConfiguration() {
 	// validate files
 	if config.LogFileName == "-" {
 		config.logFile = os.Stderr
@@ -108,7 +112,6 @@ func validateFrameworkConfiguration() {
 	}
 	runtime.GOMAXPROCS(config.GOMAXPROCS)
 
-	//validate/start prometheus
 	if config.Prometheus != "" {
 		go func() {
 			http.Handle("metrics", promhttp.Handler())
@@ -117,8 +120,6 @@ func validateFrameworkConfiguration() {
 			}
 		}()
 	}
-
-	//validate senders
 	if config.Senders <= 0 {
 		log.Fatalf("need at least one sender, given %d", config.Senders)
 	}
@@ -139,7 +140,7 @@ func validateFrameworkConfiguration() {
 	}
 }
 
-// GetMetaFile returns the file to which metadata should be output
+// GetMetaFile returns the file to which metadata should be output.
 func GetMetaFile() *os.File {
 	return config.metaFile
 }
